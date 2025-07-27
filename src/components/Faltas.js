@@ -92,79 +92,169 @@ function Faltas({ actualizar }) {
     : faltas;
 
   return (
-    <div style={{ marginTop: '20px' }}>
-      <h3 style={{ color: '#4A148C', marginBottom: '10px' }}>📒 Faltas</h3>
+    <div className="contenedor-faltas">
+      <style>{`
+        .contenedor-faltas {
+          margin-top: 20px;
+          padding: 0 10px;
+        }
 
-      <form onSubmit={handleSubmit} style={{ marginBottom: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <select
-          value={estudianteId}
-          onChange={e => setEstudianteId(e.target.value)}
-          required
-          style={{ padding: '8px', borderRadius: '6px' }}
+        .center-mobile {
+          display: flex;
+          justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+          .center-mobile {
+            flex-direction: column;
+            align-items: center;
+          }
+
+          form, .filtro-wrapper, .faltas-table-wrapper {
+            width: 100%;
+            max-width: 500px;
+          }
+        }
+
+        .faltas-table-wrapper {
+          width: 100%;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .faltas-table {
+          min-width: 600px;
+          width: 100%;
+          margin: 0 auto;
+          border-collapse: collapse;
+          background-color: #fff;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          border-radius: 8px;
+        }
+
+        .faltas-table th,
+        .faltas-table td {
+          padding: 10px;
+          border-bottom: 1px solid #eee;
+        }
+
+        @media (max-width: 768px) {
+          .faltas-table thead {
+            display: none;
+          }
+
+          .faltas-table,
+          .faltas-table tr,
+          .faltas-table td {
+            display: block;
+            width: 100%;
+          }
+
+          .faltas-table tr {
+            margin-bottom: 10px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 10px;
+          }
+
+          .faltas-table td {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 10px;
+            border-bottom: none;
+          }
+
+          .faltas-table td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            color: #6200EA;
+            flex-shrink: 0;
+          }
+        }
+      `}</style>
+
+      <h3 style={{ color: '#4A148C', marginBottom: '10px', textAlign: 'center' }}>📒 Faltas</h3>
+
+      <div className="center-mobile">
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            marginBottom: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px'
+          }}
         >
-          <option value="">Seleccione un estudiante</option>
-          {estudiantes.map(est => (
-            <option key={est.id} value={est.id}>{est.nombre}</option>
-          ))}
-        </select>
-
-        <input
-          type="date"
-          value={fecha}
-          onChange={e => setFecha(e.target.value)}
-          required
-          style={{ padding: '8px', borderRadius: '6px' }}
-        />
-
-        <input
-          type="text"
-          placeholder="Descripción"
-          value={descripcion}
-          onChange={e => setDescripcion(e.target.value)}
-          required
-          style={{ padding: '8px', borderRadius: '6px' }}
-        />
-
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          <button
-            type="submit"
-            style={{
-              padding: '8px 16px',
-              borderRadius: '6px',
-              backgroundColor: editando ? '#FFB300' : '#4CAF50',
-              color: '#fff',
-              border: 'none',
-              cursor: 'pointer'
-            }}
+          <select
+            value={estudianteId}
+            onChange={e => setEstudianteId(e.target.value)}
+            required
+            style={{ padding: '8px', borderRadius: '6px' }}
           >
-            {editando ? 'Actualizar' : 'Registrar'}
-          </button>
+            <option value="">Seleccione un estudiante</option>
+            {estudiantes.map(est => (
+              <option key={est.id} value={est.id}>{est.nombre}</option>
+            ))}
+          </select>
 
-          {editando && (
+          <input
+            type="date"
+            value={fecha}
+            onChange={e => setFecha(e.target.value)}
+            required
+            style={{ padding: '8px', borderRadius: '6px' }}
+          />
+
+          <input
+            type="text"
+            placeholder="Descripción"
+            value={descripcion}
+            onChange={e => setDescripcion(e.target.value)}
+            required
+            style={{ padding: '8px', borderRadius: '6px' }}
+          />
+
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
             <button
-              type="button"
-              onClick={() => {
-                setEstudianteId('');
-                setFecha('');
-                setDescripcion('');
-                setEditando(null);
-              }}
+              type="submit"
               style={{
                 padding: '8px 16px',
                 borderRadius: '6px',
-                backgroundColor: '#9E9E9E',
+                backgroundColor: editando ? '#FFB300' : '#4CAF50',
                 color: '#fff',
                 border: 'none',
                 cursor: 'pointer'
               }}
             >
-              Cancelar
+              {editando ? 'Actualizar' : 'Registrar'}
             </button>
-          )}
-        </div>
-      </form>
 
-      <div style={{ marginBottom: '20px' }}>
+            {editando && (
+              <button
+                type="button"
+                onClick={() => {
+                  setEstudianteId('');
+                  setFecha('');
+                  setDescripcion('');
+                  setEditando(null);
+                }}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  backgroundColor: '#9E9E9E',
+                  color: '#fff',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                Cancelar
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
+
+      <div className="center-mobile filtro-wrapper" style={{ marginBottom: '20px' }}>
         <label style={{ fontWeight: 'bold' }}>Filtrar por grado: </label>
         <select
           value={gradoFiltro}
@@ -192,65 +282,7 @@ function Faltas({ actualizar }) {
         </button>
       </div>
 
-      <div className="faltas-table-wrapper">
-        <style>{`
-          .faltas-table-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-          }
-
-          .faltas-table {
-            min-width: 600px;
-            width: 100%;
-            margin: 0 auto;
-            border-collapse: collapse;
-            background-color: #fff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-          }
-
-          .faltas-table th,
-          .faltas-table td {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-          }
-
-          @media (max-width: 768px) {
-            .faltas-table thead {
-              display: none;
-            }
-
-            .faltas-table,
-            .faltas-table tr,
-            .faltas-table td {
-              display: block;
-              width: 100%;
-            }
-
-            .faltas-table tr {
-              margin-bottom: 10px;
-              background: #f9f9f9;
-              border-radius: 8px;
-              padding: 10px;
-            }
-
-            .faltas-table td {
-              display: flex;
-              justify-content: space-between;
-              padding: 8px 10px;
-              border-bottom: none;
-            }
-
-            .faltas-table td::before {
-              content: attr(data-label);
-              font-weight: bold;
-              color: #6200EA;
-              flex-shrink: 0;
-            }
-          }
-        `}</style>
-
+      <div className="center-mobile faltas-table-wrapper">
         <table className="faltas-table">
           <thead style={{ backgroundColor: '#6200EA', color: '#fff' }}>
             <tr>
@@ -315,6 +347,7 @@ function Faltas({ actualizar }) {
 }
 
 export default Faltas;
+
 
 
 
