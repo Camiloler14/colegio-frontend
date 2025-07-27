@@ -43,16 +43,17 @@ function Faltas({ actualizar }) {
     try {
       if (editando) {
         await api.put(`/faltas/${editando}`, {
-          estudiante_id: estudianteId,
+          id_estudiante: estudianteId,
           fecha,
           descripcion
         });
       } else {
         await api.post('/faltas', {
-          estudiante_id: estudianteId,
-          fecha,
-          descripcion
-        });
+  id_estudiante: estudianteId, // ✅ Nombre del campo correcto
+  fecha,
+  descripcion
+});
+
       }
       setEstudianteId('');
       setFecha('');
@@ -65,11 +66,12 @@ function Faltas({ actualizar }) {
   };
 
   const editarFalta = (falta) => {
-    setEstudianteId(falta.estudiante_id);
-    setFecha(falta.fecha.split('T')[0]);
-    setDescripcion(falta.descripcion);
-    setEditando(falta.id);
-  };
+  setEstudianteId(falta.id_estudiante); // ✅ corregido
+  setFecha(falta.fecha.split('T')[0]);
+  setDescripcion(falta.descripcion);
+  setEditando(falta.id);
+};
+
 
   const eliminarFalta = async (id) => {
     if (!window.confirm('¿Eliminar esta falta?')) return;
