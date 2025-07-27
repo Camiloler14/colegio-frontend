@@ -19,12 +19,11 @@ function PublicView() {
     }
   };
 
-  const formatFecha = (date) => {
-    const d = typeof date === 'string' ? new Date(date) : date;
-    return d.toISOString().split('T')[0]; // formato yyyy-mm-dd
-  };
+  // Formatear fecha como YYYY-MM-DD sin errores de zona horaria
+  const formatFecha = (fechaStr) => fechaStr.slice(0, 10);
 
-  const faltasFiltradas = faltas.filter((f) => {
+  // Filtrado por grado y fecha
+  const faltasFiltradas = faltas.filter(f => {
     const cumpleGrado = gradoFiltro ? f.grado === gradoFiltro : true;
     const cumpleFecha = fechaFiltro ? formatFecha(f.fecha) === fechaFiltro : true;
     return cumpleGrado && cumpleFecha;
@@ -46,9 +45,7 @@ function PublicView() {
           >
             <option value="">Todos</option>
             {[...Array(11)].map((_, i) => (
-              <option key={i + 1} value={String(i + 1)}>
-                {i + 1}
-              </option>
+              <option key={i + 1} value={String(i + 1)}>{i + 1}</option>
             ))}
           </select>
         </label>
@@ -81,16 +78,14 @@ function PublicView() {
         </button>
       </div>
 
-      <table
-        style={{
-          width: '100%',
-          borderCollapse: 'collapse',
-          backgroundColor: '#fff',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-          borderRadius: '8px',
-          overflow: 'hidden',
-        }}
-      >
+      <table style={{
+        width: '100%',
+        borderCollapse: 'collapse',
+        backgroundColor: '#fff',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+        borderRadius: '8px',
+        overflow: 'hidden',
+      }}>
         <thead style={{ backgroundColor: '#6200EA', color: '#fff' }}>
           <tr>
             <th style={{ padding: '10px', textAlign: 'center' }}>Estudiante</th>
@@ -107,7 +102,7 @@ function PublicView() {
               </td>
             </tr>
           ) : (
-            faltasFiltradas.map((falta) => (
+            faltasFiltradas.map(falta => (
               <tr key={falta.id}>
                 <td style={{ padding: '10px', borderBottom: '1px solid #eee', textAlign: 'center' }}>
                   {falta.nombre_estudiante}
@@ -131,6 +126,7 @@ function PublicView() {
 }
 
 export default PublicView;
+
 
 
 
