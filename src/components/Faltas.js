@@ -49,12 +49,12 @@ function Faltas({ actualizar }) {
         });
       } else {
         await api.post('/faltas', {
-  id_estudiante: estudianteId, // ✅ Nombre del campo correcto
-  fecha,
-  descripcion
-});
-
+          id_estudiante: estudianteId,
+          fecha,
+          descripcion
+        });
       }
+
       setEstudianteId('');
       setFecha('');
       setDescripcion('');
@@ -66,12 +66,11 @@ function Faltas({ actualizar }) {
   };
 
   const editarFalta = (falta) => {
-  setEstudianteId(falta.id_estudiante); // ✅ corregido
-  setFecha(falta.fecha.split('T')[0]);
-  setDescripcion(falta.descripcion);
-  setEditando(falta.id);
-};
-
+    setEstudianteId(falta.id_estudiante);
+    setFecha(falta.fecha.slice(0, 10));
+    setDescripcion(falta.descripcion);
+    setEditando(falta.id);
+  };
 
   const eliminarFalta = async (id) => {
     if (!window.confirm('¿Eliminar esta falta?')) return;
@@ -222,7 +221,9 @@ function Faltas({ actualizar }) {
               <tr key={f.id}>
                 <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{f.nombre_estudiante}</td>
                 <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{f.grado}</td>
-                <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{new Date(f.fecha).toLocaleDateString()}</td>
+                <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>
+                  {f.fecha.slice(0, 10)}
+                </td>
                 <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{f.descripcion}</td>
                 <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>
                   <button
@@ -263,3 +264,4 @@ function Faltas({ actualizar }) {
 }
 
 export default Faltas;
+
