@@ -19,10 +19,14 @@ function PublicView() {
     }
   };
 
-  // Filtrado por grado y fecha (día)
-  const faltasFiltradas = faltas.filter(f => {
+  const formatFecha = (date) => {
+    const d = typeof date === 'string' ? new Date(date) : date;
+    return d.toISOString().split('T')[0]; // formato yyyy-mm-dd
+  };
+
+  const faltasFiltradas = faltas.filter((f) => {
     const cumpleGrado = gradoFiltro ? f.grado === gradoFiltro : true;
-    const cumpleFecha = fechaFiltro ? f.fecha.split('T')[0] === fechaFiltro : true;
+    const cumpleFecha = fechaFiltro ? formatFecha(f.fecha) === fechaFiltro : true;
     return cumpleGrado && cumpleFecha;
   });
 
@@ -88,13 +92,13 @@ function PublicView() {
         }}
       >
         <thead style={{ backgroundColor: '#6200EA', color: '#fff' }}>
-  <tr>
-    <th style={{ padding: '10px', textAlign: 'center' }}>Estudiante</th>
-    <th style={{ padding: '10px', textAlign: 'center' }}>Grado</th>
-    <th style={{ padding: '10px', textAlign: 'center' }}>Fecha</th>
-    <th style={{ padding: '10px', textAlign: 'center' }}>Descripción</th>
-  </tr>
-</thead>
+          <tr>
+            <th style={{ padding: '10px', textAlign: 'center' }}>Estudiante</th>
+            <th style={{ padding: '10px', textAlign: 'center' }}>Grado</th>
+            <th style={{ padding: '10px', textAlign: 'center' }}>Fecha</th>
+            <th style={{ padding: '10px', textAlign: 'center' }}>Descripción</th>
+          </tr>
+        </thead>
         <tbody>
           {faltasFiltradas.length === 0 ? (
             <tr>
@@ -103,7 +107,7 @@ function PublicView() {
               </td>
             </tr>
           ) : (
-            faltasFiltradas.map(falta => (
+            faltasFiltradas.map((falta) => (
               <tr key={falta.id}>
                 <td style={{ padding: '10px', borderBottom: '1px solid #eee', textAlign: 'center' }}>
                   {falta.nombre_estudiante}
@@ -112,7 +116,7 @@ function PublicView() {
                   {falta.grado}
                 </td>
                 <td style={{ padding: '10px', borderBottom: '1px solid #eee', textAlign: 'center' }}>
-                  {new Date(falta.fecha).toLocaleDateString()}
+                  {formatFecha(falta.fecha)}
                 </td>
                 <td style={{ padding: '10px', borderBottom: '1px solid #eee', textAlign: 'center' }}>
                   {falta.descripcion}
@@ -127,5 +131,6 @@ function PublicView() {
 }
 
 export default PublicView;
+
 
 
