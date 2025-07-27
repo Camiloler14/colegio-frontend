@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import api from '../axiosConfig';
 
 function Faltas({ actualizar }) {
