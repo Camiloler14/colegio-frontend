@@ -92,10 +92,59 @@ function Faltas({ actualizar }) {
     : faltas;
 
   return (
-    <div style={{ marginTop: '20px' }}>
+    <div className="faltas-container">
+      <style>{`
+        .faltas-container {
+          margin-top: 20px;
+          padding: 10px;
+        }
+        .faltas-form {
+          margin-bottom: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+        .faltas-table {
+          width: 100%;
+          border-collapse: collapse;
+          background-color: #fff;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          border-radius: 8px;
+          overflow-x: auto;
+        }
+        .faltas-table th,
+        .faltas-table td {
+          padding: 10px;
+          border-bottom: 1px solid #eee;
+        }
+        @media (max-width: 768px) {
+          .faltas-table thead {
+            display: none;
+          }
+          .faltas-table tr {
+            display: block;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 10px;
+          }
+          .faltas-table td {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 10px;
+            border-bottom: none;
+          }
+          .faltas-table td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            color: #6200EA;
+          }
+        }
+      `}</style>
+
       <h3 style={{ color: '#4A148C', marginBottom: '10px' }}>📒 Faltas</h3>
 
-      <form onSubmit={handleSubmit} style={{ marginBottom: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <form onSubmit={handleSubmit} className="faltas-form">
         <select
           value={estudianteId}
           onChange={e => setEstudianteId(e.target.value)}
@@ -192,40 +241,31 @@ function Faltas({ actualizar }) {
         </button>
       </div>
 
-      <table style={{
-        width: '100%',
-        borderCollapse: 'collapse',
-        backgroundColor: '#fff',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-        borderRadius: '8px',
-        overflow: 'hidden'
-      }}>
+      <table className="faltas-table">
         <thead style={{ backgroundColor: '#6200EA', color: '#fff' }}>
           <tr>
-            <th style={{ padding: '10px' }}>Estudiante</th>
-            <th style={{ padding: '10px' }}>Grado</th>
-            <th style={{ padding: '10px' }}>Fecha</th>
-            <th style={{ padding: '10px' }}>Descripción</th>
-            <th style={{ padding: '10px' }}>Acciones</th>
+            <th>Estudiante</th>
+            <th>Grado</th>
+            <th>Fecha</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           {faltasFiltradas.length === 0 ? (
             <tr>
-              <td colSpan="5" style={{ padding: '10px', textAlign: 'center' }}>
+              <td colSpan="5" style={{ textAlign: 'center' }}>
                 No hay faltas para los filtros seleccionados.
               </td>
             </tr>
           ) : (
             faltasFiltradas.map(f => (
               <tr key={f.id}>
-                <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{f.nombre_estudiante}</td>
-                <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{f.grado}</td>
-                <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>
-                  {f.fecha.slice(0, 10)}
-                </td>
-                <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{f.descripcion}</td>
-                <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>
+                <td data-label="Estudiante">{f.nombre_estudiante}</td>
+                <td data-label="Grado">{f.grado}</td>
+                <td data-label="Fecha">{f.fecha.slice(0, 10)}</td>
+                <td data-label="Descripción">{f.descripcion}</td>
+                <td data-label="Acciones">
                   <button
                     onClick={() => editarFalta(f)}
                     style={{
@@ -264,4 +304,5 @@ function Faltas({ actualizar }) {
 }
 
 export default Faltas;
+
 
