@@ -92,59 +92,10 @@ function Faltas({ actualizar }) {
     : faltas;
 
   return (
-    <div className="faltas-container">
-      <style>{`
-        .faltas-container {
-          margin-top: 20px;
-          padding: 10px;
-        }
-        .faltas-form {
-          margin-bottom: 20px;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-        }
-        .faltas-table {
-          width: 100%;
-          border-collapse: collapse;
-          background-color: #fff;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-          border-radius: 8px;
-          overflow-x: auto;
-        }
-        .faltas-table th,
-        .faltas-table td {
-          padding: 10px;
-          border-bottom: 1px solid #eee;
-        }
-        @media (max-width: 768px) {
-          .faltas-table thead {
-            display: none;
-          }
-          .faltas-table tr {
-            display: block;
-            margin-bottom: 10px;
-            background: #f9f9f9;
-            border-radius: 8px;
-            padding: 10px;
-          }
-          .faltas-table td {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 10px;
-            border-bottom: none;
-          }
-          .faltas-table td::before {
-            content: attr(data-label);
-            font-weight: bold;
-            color: #6200EA;
-          }
-        }
-      `}</style>
-
+    <div style={{ marginTop: '20px' }}>
       <h3 style={{ color: '#4A148C', marginBottom: '10px' }}>📒 Faltas</h3>
 
-      <form onSubmit={handleSubmit} className="faltas-form">
+      <form onSubmit={handleSubmit} style={{ marginBottom: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <select
           value={estudianteId}
           onChange={e => setEstudianteId(e.target.value)}
@@ -174,7 +125,7 @@ function Faltas({ actualizar }) {
           style={{ padding: '8px', borderRadius: '6px' }}
         />
 
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
           <button
             type="submit"
             style={{
@@ -241,68 +192,129 @@ function Faltas({ actualizar }) {
         </button>
       </div>
 
-      <table className="faltas-table">
-        <thead style={{ backgroundColor: '#6200EA', color: '#fff' }}>
-          <tr>
-            <th>Estudiante</th>
-            <th>Grado</th>
-            <th>Fecha</th>
-            <th>Descripción</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {faltasFiltradas.length === 0 ? (
+      <div className="faltas-table-wrapper">
+        <style>{`
+          .faltas-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+          }
+
+          .faltas-table {
+            min-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+          }
+
+          .faltas-table th,
+          .faltas-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+          }
+
+          @media (max-width: 768px) {
+            .faltas-table thead {
+              display: none;
+            }
+
+            .faltas-table,
+            .faltas-table tr,
+            .faltas-table td {
+              display: block;
+              width: 100%;
+            }
+
+            .faltas-table tr {
+              margin-bottom: 10px;
+              background: #f9f9f9;
+              border-radius: 8px;
+              padding: 10px;
+            }
+
+            .faltas-table td {
+              display: flex;
+              justify-content: space-between;
+              padding: 8px 10px;
+              border-bottom: none;
+            }
+
+            .faltas-table td::before {
+              content: attr(data-label);
+              font-weight: bold;
+              color: #6200EA;
+              flex-shrink: 0;
+            }
+          }
+        `}</style>
+
+        <table className="faltas-table">
+          <thead style={{ backgroundColor: '#6200EA', color: '#fff' }}>
             <tr>
-              <td colSpan="5" style={{ textAlign: 'center' }}>
-                No hay faltas para los filtros seleccionados.
-              </td>
+              <th>Estudiante</th>
+              <th>Grado</th>
+              <th>Fecha</th>
+              <th>Descripción</th>
+              <th>Acciones</th>
             </tr>
-          ) : (
-            faltasFiltradas.map(f => (
-              <tr key={f.id}>
-                <td data-label="Estudiante">{f.nombre_estudiante}</td>
-                <td data-label="Grado">{f.grado}</td>
-                <td data-label="Fecha">{f.fecha.slice(0, 10)}</td>
-                <td data-label="Descripción">{f.descripcion}</td>
-                <td data-label="Acciones">
-                  <button
-                    onClick={() => editarFalta(f)}
-                    style={{
-                      marginRight: '10px',
-                      backgroundColor: '#03A9F4',
-                      border: 'none',
-                      padding: '6px 10px',
-                      color: 'white',
-                      borderRadius: '6px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => eliminarFalta(f.id)}
-                    style={{
-                      backgroundColor: '#E53935',
-                      border: 'none',
-                      padding: '6px 10px',
-                      color: 'white',
-                      borderRadius: '6px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Eliminar
-                  </button>
+          </thead>
+          <tbody>
+            {faltasFiltradas.length === 0 ? (
+              <tr>
+                <td colSpan="5" style={{ textAlign: 'center' }}>
+                  No hay faltas para los filtros seleccionados.
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              faltasFiltradas.map(f => (
+                <tr key={f.id}>
+                  <td data-label="Estudiante">{f.nombre_estudiante}</td>
+                  <td data-label="Grado">{f.grado}</td>
+                  <td data-label="Fecha">{f.fecha.slice(0, 10)}</td>
+                  <td data-label="Descripción">{f.descripcion}</td>
+                  <td data-label="Acciones">
+                    <button
+                      onClick={() => editarFalta(f)}
+                      style={{
+                        marginRight: '10px',
+                        backgroundColor: '#03A9F4',
+                        border: 'none',
+                        padding: '6px 10px',
+                        color: 'white',
+                        borderRadius: '6px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => eliminarFalta(f.id)}
+                      style={{
+                        backgroundColor: '#E53935',
+                        border: 'none',
+                        padding: '6px 10px',
+                        color: 'white',
+                        borderRadius: '6px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
 
 export default Faltas;
+
 
 
