@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+hacer responsive : import React, { useEffect, useState } from 'react';
 import Estudiantes from '../components/Estudiantes';
 import Faltas from '../components/Faltas';
 import { useNavigate } from 'react-router-dom';
@@ -30,34 +30,10 @@ function AdminPanel() {
 
   return (
     <div style={backgroundStyle}>
-      <style>{`
-        @media (max-width: 768px) {
-          .panel {
-            flex-direction: column;
-            align-items: center;
-          }
-          .card {
-            width: 100% !important;
-            max-width: 500px;
-          }
-          .header-buttons {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 10px;
-          }
-        }
-      `}</style>
-
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '10px'
-      }} className="header-buttons">
-        <h2 style={{ color: '#222' }}>🤗 {nombre}</h2>
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          <button onClick={refrescarPagina} style={{ ...cerrarButtonStyle, backgroundColor: '#1976D2' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h2 style={{ color: '#222' }}>🤗{nombre}</h2>
+        <div>
+          <button onClick={refrescarPagina} style={{...cerrarButtonStyle, marginRight: '10px', backgroundColor: '#1976D2'}}>
             Actualizar
           </button>
           <button onClick={cerrarSesion} style={cerrarButtonStyle}>
@@ -65,15 +41,14 @@ function AdminPanel() {
           </button>
         </div>
       </div>
-
       <p style={{ color: '#444' }}>Aquí podrás gestionar estudiantes y faltas.</p>
       <hr style={{ margin: '20px 0' }} />
 
-      <div style={panelStyle} className="panel">
-        <div style={cardStyle} className="card">
+      <div style={panelStyle}>
+        <div style={cardStyle}>
           <Estudiantes onEstudianteGuardado={triggerActualizarFaltas} />
         </div>
-        <div style={cardStyle} className="card">
+        <div style={cardStyle}>
           <Faltas actualizar={actualizarFaltas} />
         </div>
       </div>
@@ -88,7 +63,6 @@ const cardStyle = {
   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
   flex: 1,
   minWidth: '300px',
-  maxWidth: '600px',
   backdropFilter: 'blur(5px)'
 };
 
@@ -97,7 +71,6 @@ const panelStyle = {
   flexWrap: 'wrap',
   gap: '40px',
   alignItems: 'flex-start',
-  justifyContent: 'center',
   marginTop: '20px'
 };
 
