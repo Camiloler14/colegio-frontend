@@ -7,36 +7,37 @@ function Login() {
   const [password, setPassword] = useState("");
   const [recordarme, setRecordarme] = useState(false);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // NUEVO: estado de carga
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true); // Empieza carga
 
     try {
       const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/login`,
-        { email, password }
+        ${process.env.REACT_APP_API_URL}/auth/login,
+        {
+          email,
+          password,
+        }
       );
 
       const { token, nombre, rol } = res.data;
-      const sesionInicio = Date.now();
+      const sesionInicio = new Date().getTime();
 
+      // Guardar en localStorage si se marca "Recordarme", si no, usar sessionStorage
       const storage = recordarme ? localStorage : sessionStorage;
 
       storage.setItem("token", token);
       storage.setItem("rol", rol);
       storage.setItem("nombre", nombre);
       storage.setItem("sesionInicio", sesionInicio.toString());
+      console.log("Nombre recibido:", nombre);
 
-      // Navegar sin necesidad de recargar
-      navigate("/admin", { replace: true });
+      navigate("/admin");
     } catch (err) {
+      console.error(err);
       setError("Credenciales incorrectas");
-    } finally {
-      setLoading(false); // Termina carga
     }
   };
 
@@ -52,7 +53,6 @@ function Login() {
             onChange={(e) => setEmail(e.target.value)}
             required
             style={styles.input}
-            disabled={loading}
           />
 
           <label style={styles.label}>Contraseña:</label>
@@ -62,23 +62,28 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
             required
             style={styles.input}
-            disabled={loading}
           />
 
-          <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px" }}>
+          <label
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              fontSize: "14px",
+            }}
+          >
             <input
               type="checkbox"
               checked={recordarme}
               onChange={(e) => setRecordarme(e.target.checked)}
-              disabled={loading}
             />
             Recordarme
           </label>
 
           {error && <p style={styles.error}>{error}</p>}
 
-          <button type="submit" style={{ ...styles.button, opacity: loading ? 0.6 : 1 }} disabled={loading}>
-            {loading ? "Iniciando..." : "Iniciar sesión"}
+          <button type="submit" style={styles.button}>
+            Iniciar sesión
           </button>
         </form>
       </div>
